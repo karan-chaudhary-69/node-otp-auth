@@ -1,76 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>OTP Verification</title>
+  <meta charset="UTF-8">
+  <title>OTP Verification</title>
 </head>
-
 <body>
-    <h1>Email OTP Verification</h1>
+  <h1>Email OTP Verification</h1>
 
-    <div>
-        <h2>Step 1: Send OTP</h2>
-        <input type="email" id="email" placeholder="Enter your email" required>
-        <button id="sendBtn">Send OTP</button>
-        <p id="sendMsg"></p>
-    </div>
+  <div>
+    <h2>Step 1: Send OTP</h2>
+    <input type="email" id="email" placeholder="Enter your email" required>
+    <button id="sendBtn">Send OTP</button>
+    <p id="sendMsg"></p>
+  </div>
 
-    <div>
-        <h2>Step 2: Verify OTP</h2>
-        <input type="text" id="otp" placeholder="Enter OTP" required>
-        <button id="verifyBtn">Verify OTP</button>
-        <p id="verifyMsg"></p>
-    </div>
+  <div>
+    <h2>Step 2: Verify OTP</h2>
+    <input type="text" id="otp" placeholder="Enter OTP" required>
+    <button id="verifyBtn">Verify OTP</button>
+    <p id="verifyMsg"></p>
+  </div>
 
-    <script>
-        // Send OTP
-        document.getElementById('sendBtn').addEventListener('click', async () => {
-            const email = document.getElementById('email').value;
-            const msg = document.getElementById('sendMsg');
-            const button = document.getElementById('sendBtn');
+  <script>
+    document.getElementById('sendBtn').addEventListener('click', async () => {
+      const email = document.getElementById('email').value;
+      const msg = document.getElementById('sendMsg');
+      const btn = document.getElementById('sendBtn');
+      btn.disabled = true;
+      btn.innerText = "Sending...";
 
-            button.disabled = true;
-            button.innerText = "Sending...";
-
-            try {
-                const res = await fetch('/send-otp', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
-
-                const text = await res.text();
-                msg.textContent = text;
-            } catch (err) {
-                msg.textContent = "Error sending OTP: " + err.message;
-            }
-
-            setTimeout(() => {
-                button.disabled = false;
-                button.innerText = "Send OTP";
-            }, 30000);
+      try {
+        const res = await fetch('/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
         });
+        const text = await res.text();
+        msg.textContent = text;
+      } catch (err) {
+        msg.textContent = "Error sending OTP: " + err.message;
+      }
 
-        // Verify OTP
-        document.getElementById('verifyBtn').addEventListener('click', async () => {
-            const email = document.getElementById('email').value;
-            const otp = document.getElementById('otp').value;
-            const msg = document.getElementById('verifyMsg');
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerText = "Send OTP";
+      }, 30000);
+    });
 
-            try {
-                const res = await fetch('/verify-otp', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, otp })
-                });
-                const text = await res.text();
-                msg.textContent = text;
-            } catch (err) {
-                msg.textContent = "Error verifying OTP: " + err.message;
-            }
+    document.getElementById('verifyBtn').addEventListener('click', async () => {
+      const email = document.getElementById('email').value;
+      const otp = document.getElementById('otp').value;
+      const msg = document.getElementById('verifyMsg');
+
+      try {
+        const res = await fetch('/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, otp })
         });
-    </script>
+        const text = await res.text();
+        msg.textContent = text;
+      } catch (err) {
+        msg.textContent = "Error verifying OTP: " + err.message;
+      }
+    });
+  </script>
 </body>
-
 </html>
