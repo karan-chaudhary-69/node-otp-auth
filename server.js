@@ -26,12 +26,16 @@ app.use("/send-otp", otpLimiter);
 // -----------------
 // MongoDB Connection
 // -----------------
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+// OLD (causes error in Mongoose 7+)
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+// NEW (Mongoose 7+)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected Successfully"))
   .catch(err => {
     console.error("❌ MongoDB Connection Error:", err.message);
     process.exit(1);
-  });
+  });;
 
 // -----------------
 // Nodemailer
