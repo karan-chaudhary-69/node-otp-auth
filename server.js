@@ -24,22 +24,16 @@ const otpLimiter = rateLimit({
 app.use("/send-otp", otpLimiter);
 
 // -----------------
-// MongoDB Connection
-// -----------------
-// OLD (causes error in Mongoose 7+)
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-// NEW (Mongoose 7+)
+// MongoDB Connection (Mongoose 7+)
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected Successfully"))
   .catch(err => {
     console.error("❌ MongoDB Connection Error:", err.message);
     process.exit(1);
-  });;
+  });
 
 // -----------------
 // Nodemailer
-// -----------------
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
@@ -48,8 +42,6 @@ const transporter = nodemailer.createTransport({
 // -----------------
 // Routes
 // -----------------
-
-// Test route
 app.get('/ping', (req, res) => res.send('pong'));
 
 // Send OTP
@@ -114,7 +106,6 @@ app.post('/verify-otp', async (req, res) => {
 
 // -----------------
 // Start Server
-// -----------------
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
