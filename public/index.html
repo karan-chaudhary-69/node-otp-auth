@@ -33,6 +33,13 @@
             button.innerText = "Sending...";
 
             try {
+  await transporter.sendMail({...});
+} catch(err) {
+  console.error("Email error:", err.message);
+  return res.status(500).send("Failed to send email");
+}
+            
+            try {
                 const res = await fetch('/send-otp', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
