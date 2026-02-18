@@ -12,33 +12,27 @@
     <div>
         <h2>Step 1: Send OTP</h2>
         <input type="email" id="email" placeholder="Enter your email" required>
-        <button onclick="sendOtp()">Send OTP</button>
+        <button id="sendBtn">Send OTP</button>
         <p id="sendMsg"></p>
     </div>
 
     <div>
         <h2>Step 2: Verify OTP</h2>
         <input type="text" id="otp" placeholder="Enter OTP" required>
-        <button onclick="verifyOtp()">Verify OTP</button>
+        <button id="verifyBtn">Verify OTP</button>
         <p id="verifyMsg"></p>
     </div>
 
     <script>
-        async function sendOtp() {
+        // Send OTP
+        document.getElementById('sendBtn').addEventListener('click', async () => {
             const email = document.getElementById('email').value;
             const msg = document.getElementById('sendMsg');
-            const button = document.querySelector("button");
+            const button = document.getElementById('sendBtn');
 
-            button.disabled = true; // 👈 disable button
+            button.disabled = true;
             button.innerText = "Sending...";
 
-            try {
-  await transporter.sendMail({...});
-} catch(err) {
-  console.error("Email error:", err.message);
-  return res.status(500).send("Failed to send email");
-}
-            
             try {
                 const res = await fetch('/send-otp', {
                     method: 'POST',
@@ -52,14 +46,14 @@
                 msg.textContent = "Error sending OTP: " + err.message;
             }
 
-            // Enable after 30 seconds cooldown
             setTimeout(() => {
                 button.disabled = false;
                 button.innerText = "Send OTP";
-            }, 30000); // 30 seconds
-        }
+            }, 30000);
+        });
 
-        async function verifyOtp() {
+        // Verify OTP
+        document.getElementById('verifyBtn').addEventListener('click', async () => {
             const email = document.getElementById('email').value;
             const otp = document.getElementById('otp').value;
             const msg = document.getElementById('verifyMsg');
@@ -75,7 +69,7 @@
             } catch (err) {
                 msg.textContent = "Error verifying OTP: " + err.message;
             }
-        }
+        });
     </script>
 </body>
 
