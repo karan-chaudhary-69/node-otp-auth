@@ -1,7 +1,4 @@
 {
-  "rewrites": [
-    { "source": "/", "destination": "/index.html" }
-  ],
   "name": "otp-auth",
   "version": "1.0.0",
   "main": "index.js",
