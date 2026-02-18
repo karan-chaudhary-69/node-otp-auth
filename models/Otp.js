@@ -1,8 +1,11 @@
-await mongoose.connect(process.env.MONGO_URI);   // MongoDB
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
+const mongoose = require('mongoose');
+
+const OtpSchema = new mongoose.Schema({
+  email: String,
+  otp: String,
+  createdAt: Date,
+  attempts: Number,
+  lockUntil: Date
 });
+
+module.exports = mongoose.model('Otp', OtpSchema);
