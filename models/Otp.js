@@ -8,7 +8,7 @@ const Otp = require('../models/Otp');
 const app = express();
 app.use(express.json());
 
-// MongoDB connection reuse
+// Reuse MongoDB connection
 let isConnected = false;
 async function connectDB() {
   if (isConnected) return;
@@ -16,13 +16,10 @@ async function connectDB() {
   isConnected = true;
 }
 
-// Nodemailer setup
+// Nodemailer transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
+  auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
 });
 
 // Send OTP
@@ -72,4 +69,5 @@ app.post('/verify-otp', async (req, res) => {
   }
 });
 
+// Export handler for Vercel
 module.exports = serverless(app);
