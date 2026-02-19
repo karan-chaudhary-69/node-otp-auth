@@ -1,8 +1,14 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const nodemailer = require('nodemailer');
-const bcrypt = require('bcrypt');
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+  tls: { rejectUnauthorized: false }, // optional
+  family: 4 // 👈 force IPv4
+});const bcrypt = require('bcrypt');
 const rateLimit = require('express-rate-limit');
 const Otp = require('./models/Otp');
 const cors = require('cors');
